@@ -1,6 +1,14 @@
+! Program exploring the "minimal energy daisies" 
+!
+! Copyright 2020 by Patrizia Favaron
+!
+! This is open-source softeare, covered by the MIT license
+!
 program Minimal_Daisies
 
     implicit none
+    
+    use md
     
     ! Locals
     integer                         :: iErrCode
@@ -10,6 +18,8 @@ program Minimal_Daisies
     real, dimension(:), allocatable :: rvY
     character(len=256)              :: sOutFile
     character(len=16)               :: sBuffer
+    real, dimension(:), allocatable :: rvX
+    real, dimension(:), allocatable :: rvY
     
     ! Get parameters
     if(command_argument_count() /= 3) then
@@ -40,5 +50,6 @@ program Minimal_Daisies
     call get_command_argument(3, sOutFile)
     
     ! Generate an initial admissible configuration
+    call generate_admissible(iNumPoints, rvX, rvY)
 
 end program Minimal_Daisies
