@@ -18,8 +18,6 @@ program Minimal_Daisies
     real, dimension(:), allocatable :: rvY
     character(len=256)              :: sOutFile
     character(len=16)               :: sBuffer
-    real, dimension(:), allocatable :: rvX
-    real, dimension(:), allocatable :: rvY
     
     ! Get parameters
     if(command_argument_count() /= 3) then
