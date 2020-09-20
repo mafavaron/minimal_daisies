@@ -6,9 +6,9 @@
 !
 program Minimal_Daisies
 
-    implicit none
-    
     use md
+    
+    implicit none
     
     ! Locals
     integer                         :: iErrCode
@@ -49,5 +49,6 @@ program Minimal_Daisies
     
     ! Generate an initial admissible configuration
     call generate_admissible(iNumPoints, rvX, rvY)
+    print *, sqrt(rvX**2 + rvY**2)
 
 end program Minimal_Daisies
