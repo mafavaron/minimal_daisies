@@ -11,13 +11,14 @@ program Minimal_Daisies
     implicit none
     
     ! Locals
-    integer                         :: iErrCode
-    integer                         :: iNumPoints
-    real                            :: rExponent
-    real, dimension(:), allocatable :: rvX
-    real, dimension(:), allocatable :: rvY
-    character(len=256)              :: sOutFile
-    character(len=16)               :: sBuffer
+    integer                             :: iErrCode
+    integer                             :: iNumPoints
+    real                                :: rExponent
+    real, dimension(:), allocatable     :: rvX
+    real, dimension(:), allocatable     :: rvY
+    real, dimension(:,:), allocatable   :: rmD
+    character(len=256)                  :: sOutFile
+    character(len=16)                   :: sBuffer
     
     ! Get parameters
     if(command_argument_count() /= 3) then
@@ -48,7 +49,6 @@ program Minimal_Daisies
     call get_command_argument(3, sOutFile)
     
     ! Generate an initial admissible configuration
-    call generate_admissible(iNumPoints, rvX, rvY)
-    print *, sqrt(rvX**2 + rvY**2)
+    call generate_admissible(iNumPoints, rvX, rvY, rmD)
 
 end program Minimal_Daisies
