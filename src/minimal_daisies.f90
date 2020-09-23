@@ -17,6 +17,7 @@ program Minimal_Daisies
     real, dimension(:), allocatable     :: rvX
     real, dimension(:), allocatable     :: rvY
     real, dimension(:,:), allocatable   :: rmD
+    real, dimension(:), allocatable     :: rvC
     character(len=256)                  :: sOutFile
     character(len=16)                   :: sBuffer
     
@@ -49,6 +50,6 @@ program Minimal_Daisies
     call get_command_argument(3, sOutFile)
     
     ! Generate an initial admissible configuration
-    call generate_admissible(iNumPoints, rvX, rvY, rmD)
+    call generate_admissible(iNumPoints, rvX, rvY, rmD, rvC)
 
 end program Minimal_Daisies
