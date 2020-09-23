@@ -16,13 +16,14 @@ module md
     
 contains
 
-    subroutine generate_admissible(n, rvX, rvY, rmD)
+    subroutine generate_admissible(n, rvX, rvY, rmD, rvC)
     
         ! Routine arguments
         integer, intent(in)                             :: n    ! Positive by parameter check in calling program
         real, dimension(:), allocatable, intent(out)    :: rvX  ! Vector of buds' X coordinates
         real, dimension(:), allocatable, intent(out)    :: rvY  ! Vector of buds' Y coordinates
-        real, dimension(:,:), allocatable, intent(out)  :: rmD  ! Distances matrix
+        real, dimension(:,:), allocatable, intent(out)  :: rmD  ! Distances between any two points
+        real, dimension(:), allocatable, intent(out)    :: rvC  ! Distances between any point and center
         
         ! Locals
         integer :: i, j
@@ -32,6 +33,7 @@ contains
         allocate(rvX(n))
         allocate(rvY(n))
         allocate(rmD(n,n))
+        allocate(rvC(n))
         
         ! Main loop
         do i = 1, n
@@ -48,6 +50,7 @@ contains
         
         ! Compute distance matrix
         do i = 1, n
+            rvC(i)   = sqrt(rvX(i)**2 + rvY(i)**2)
             rmD(i,i) = 0.
             do j = i+1, n
                 rmD(i,j) = sqrt((rvX(j) - rvX(i))**2 + (rvY(j) - rvY(i))**2)
