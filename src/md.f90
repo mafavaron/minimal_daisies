@@ -61,15 +61,49 @@ contains
     end subroutine generate_admissible
     
     
-    subroutine advance_time(rvX, rvY, rDeltaT)
+    subroutine advance_time(rvX, rvY, rmD, rvC, rDeltaT, rAlpha, rBeta)
     
         ! Routine arguments
         real, dimension(:), intent(inout)   :: rvX
         real, dimension(:), intent(inout)   :: rvY
+        real, dimension(:,:), intent(in)    :: rmD
+        real, dimension(:), intent(in)      :: rvC
         real, intent(in)                    :: rDeltaT
+        real, intent(in)                    :: rAlpha
+        real, intent(in)                    :: rBeta
         
         ! Locals
+        real, dimension(size(rvX))              :: rvFx
+        real, dimension(size(rvX))              :: rvFy
+        real, dimension(size(rvX), size(rvY))   :: rmGx
+        real, dimension(size(rvX), size(rvY))   :: rmGy
+        integer                                 :: n
+        integer                                 :: i
+        integer                                 :: j
         
+        ! Constants
+        real, parameter :: K1 = 1.e-1
+        real, parameter :: K2 = 1.e-1
+        
+        ! Initialize
+        n = size(rvX)
+        
+        ! Compute "peripheral strength" components
+        rvFx = K1 * rvX * rvC**(rAlpha-1.)
+        rvFy = K1 * rvY * rvC**(rAlpha-1.)
+        
+        ! Compute "reciprocal strength" components
+        do i = 1, n
+            do j = 1, n
+                if(i /= j) then
+                    rmGx(i,j) = rvX(i) - rvX(j) + (rvX(j) - rvX(i)) * (K2*rmD(i,j)**(-rBeta-1.) + 1.)
+                    rmGy(i,j) = rvY(i) - rvY(j) + (rvY(j) - rvY(i)) * (K2*rmD(i,j)**(-rBeta-1.) + 1.)
+                else
+                    rmGx(i,j) = 0.
+                    rmGy(i,j) = 0.
+                end if
+            end do
+        end do
         
     end subroutine advance_time
 
