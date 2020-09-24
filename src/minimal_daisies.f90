@@ -51,5 +51,8 @@ program Minimal_Daisies
     
     ! Generate an initial admissible configuration
     call generate_admissible(iNumPoints, rvX, rvY, rmD, rvC)
+    
+    ! Debug: Advance one time step
+    call advance_time(rvX, rvY, rmD, rvC, 0.01, rExponent, rExponent)
 
 end program Minimal_Daisies
