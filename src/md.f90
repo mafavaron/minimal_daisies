@@ -89,8 +89,8 @@ contains
         n = size(rvX)
         
         ! Compute "peripheral strength" components
-        rvFx = K1 * rvX * rvC**(rAlpha-1.)
-        rvFy = K1 * rvY * rvC**(rAlpha-1.)
+        rvFx = -K1 * rvX * rvC**(rAlpha-1.)
+        rvFy = -K1 * rvY * rvC**(rAlpha-1.)
         
         ! Compute "point-reciprocal strength" components
         do i = 1, n
