@@ -50,7 +50,7 @@ program Minimal_Daisies
     call get_command_argument(3, sOutFile)
     
     ! Generate an initial admissible configuration
-    call generate_admissible(iNumPoints, rvX, rvY, rmD, rvC)
+    call generate_admissible(iNumPoints, rvX, rvY, rmD, rvC, .true.)
     
     ! Debug: Advance one time step
     call advance_time(rvX, rvY, rmD, rvC, 0.01, rExponent, rExponent)
