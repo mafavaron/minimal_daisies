@@ -32,7 +32,7 @@ contains
         logical :: lBuildRandomly
         
         ! Constants
-        real, parameter:: PI = 3.1415927
+        real, parameter:: PI = 3.1415926535
         
         ! Reserve workspace
         allocate(rvX(n))
@@ -62,8 +62,8 @@ contains
             end do
         else
             do i = 1, n
-                rvX(i) = 0.5*sin(PI*(i-1)/float(n))
-                rvX(i) = 0.5*cos(PI*(i-1)/float(n))
+                rvX(i) = 0.5*sin(2.*PI*(i-1)/float(n))
+                rvX(i) = 0.5*cos(2.*PI*(i-1)/float(n))
             end do
         end if
         
