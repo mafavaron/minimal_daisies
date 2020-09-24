@@ -92,7 +92,7 @@ contains
         rvFx = K1 * rvX * rvC**(rAlpha-1.)
         rvFy = K1 * rvY * rvC**(rAlpha-1.)
         
-        ! Compute "reciprocal strength" components
+        ! Compute "point-reciprocal strength" components
         do i = 1, n
             do j = 1, n
                 if(i /= j) then
@@ -104,6 +104,26 @@ contains
                 end if
             end do
         end do
+        
+        ! Print "positions" and "forces"
+        do i = 1, n
+            print *, '========================'
+            print *
+            print *, 'Point: ', i
+            print *, '  x = ', rvX(i), '  y = ', rvY(i), '  D = ', rvC(i)
+            print *
+            print *, 'Centripetal force at point:'
+            print *, '  Fx = ', rvFx(i), '   Fy = ', rvFy(i)
+            print *
+            print *, 'Forces to other points:'
+            do j = 1, n
+                if(i /= j) then
+                    print *, '   i = ', j, '  Gx = ', rmGx(i,j), '  Gy = ', rmGy(i,j)
+                end if
+            end do
+            print *
+        end do
+        print *, '========================'
         
     end subroutine advance_time
 
