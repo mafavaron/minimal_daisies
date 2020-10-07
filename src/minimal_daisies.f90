@@ -11,15 +11,14 @@ program Minimal_Daisies
     implicit none
     
     ! Locals
-    integer                             :: iErrCode
-    integer                             :: iNumPoints
-    real                                :: rExponent
-    real, dimension(:), allocatable     :: rvX
-    real, dimension(:), allocatable     :: rvY
-    real, dimension(:,:), allocatable   :: rmD
-    real, dimension(:), allocatable     :: rvC
-    character(len=256)                  :: sOutFile
-    character(len=16)                   :: sBuffer
+    integer                                     :: iErrCode
+    integer                                     :: iNumPoints
+    real                                        :: rExponent
+    character(len=256)                          :: sOutFile
+    character(len=16)                           :: sBuffer
+    integer                                     :: i
+    integer                                     :: iNumIterations
+    type(PointType), dimension(:), allocatable  :: tvPoint
     
     ! Get parameters
     if(command_argument_count() /= 3) then
@@ -50,9 +49,16 @@ program Minimal_Daisies
     call get_command_argument(3, sOutFile)
     
     ! Generate an initial admissible configuration
-    call generate_admissible(iNumPoints, rvX, rvY, rmD, rvC, .true.)
+    allocate(tvPoint(iNumPoints))
+    do i = 1, iNumPoints
+        iNumIterations = tvPoint(i) % GenerateRandom()
+    end do
     
     ! Debug: Advance one time step
-    call advance_time(rvX, rvY, rmD, rvC, 0.01, rExponent, rExponent)
+    print *, "*** Begin ***"
+    
+    ! Leave
+    deallocate(tvPoint)
+    print *, "*** End Job ***"
 
 end program Minimal_Daisies
