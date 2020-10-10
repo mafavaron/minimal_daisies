@@ -20,6 +20,7 @@ module md
         real    :: rY
     contains
         procedure   :: GenerateRandom
+        procedure   :: GenerateDeterministic
         procedure   :: ForceFromUnitCircle
     end type PointType
     
@@ -32,23 +33,40 @@ contains
         real                            :: rRho
         
         ! Locals
-        real    :: rRho
         real    :: rTheta
         
         ! Constants
         real, parameter :: PI  = 3.1415926535
         real, parameter :: PI2 = 2. * PI
         
-        ! Repeat point generation until its coordinates lie inside the unit circle
-        ! (OK, maybe not the most clever way to do; but, this step is done only
-        ! once per point on a whole simulation, so the possible extra-cost may be
-        ! safely neglected)
+        ! Generate point
         call random_number(rRho)
         call random_number(rTheta)
         this % rX = rRho * cos(rTheta*PI2)
         this % rY = rRho * sin(rTheta*PI2)
     
     end function GenerateRandom
+    
+    
+    subroutine GenerateDeterministic(this, rRho, rTheta)
+    
+        ! Routine arguments
+        class(PointType), intent(out)   :: this
+        real, intent(in)                :: rRho
+        real, intent(in)                :: rTheta
+        
+        ! Locals
+        real    :: rAlpha
+        
+        ! Check input parameters
+        rAlpha = abs(rRho)
+        if(rAlpha > 1.) rAlpha = 1. - rAlpha
+        
+        ! Compute position
+        this % rX = rRho * cos(rAlpha)
+        this % rY = rRho * sin(rAlpha)
+    
+    end subroutine GenerateDeterministic
     
     
     function ForceFromUnitCircle(this) result(tPoint)
