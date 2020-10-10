@@ -63,8 +63,8 @@ contains
         if(rAlpha > 1.) rAlpha = 1. / rAlpha
         
         ! Compute position
-        this % rX = rRho * cos(rTheta)
-        this % rY = rRho * sin(rTheta)
+        this % rX = rAlpha * cos(rTheta)
+        this % rY = rAlpha * sin(rTheta)
     
     end subroutine GenerateDeterministic
     
