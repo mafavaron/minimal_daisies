@@ -82,10 +82,15 @@ contains
         
         ! Compute the information desired
         rDistanceFromCenter = sqrt(this % rX ** 2 + this % rY ** 2)
-        rDistanceFromCircle = 1. - rDistanceFromCenter
-        rMagnitude          = rDistanceFromCircle ** -2.
-        tForce % rX         = -(this % rX / rDistanceFromCenter) * rMagnitude
-        tForce % rY         = -(this % rY / rDistanceFromCenter) * rMagnitude
+        if(rDistanceFromCenter <= 1.e-6) then
+            tForce % rX         = 0.0
+            tForce % rY         = 0.0
+        else
+            rDistanceFromCircle = 1. - rDistanceFromCenter
+            rMagnitude          = rDistanceFromCircle ** -2.
+            tForce % rX         = -(this % rX / rDistanceFromCenter) * rMagnitude
+            tForce % rY         = -(this % rY / rDistanceFromCenter) * rMagnitude
+        end if
         
     end function ForceFromUnitCircle
     
