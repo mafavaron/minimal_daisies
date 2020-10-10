@@ -19,6 +19,7 @@ program Minimal_Daisies
     integer                                     :: i
     integer                                     :: iNumIterations
     type(PointType), dimension(:), allocatable  :: tvPoint
+    type(PointType)                             :: tPoint
     
     ! Get parameters
     if(command_argument_count() /= 3) then
@@ -56,6 +57,11 @@ program Minimal_Daisies
     
     ! Debug: Advance one time step
     print *, "*** Begin ***"
+    
+    do i = 1, 8
+        call tPoint % GenerateDeterministic(0.5, ((i-1) / 8.) * 2. * 3.1415926535)
+        print *, i, tPoint % rX, tPoint % rY
+    end do
     
     ! Leave
     deallocate(tvPoint)
