@@ -69,25 +69,23 @@ contains
     end subroutine GenerateDeterministic
     
     
-    function ForceFromUnitCircle(this) result(tPoint)
+    function ForceFromUnitCircle(this) result(tForce)
     
         ! Routine arguments
         class(PointType), intent(in)    :: this
-        type(PointType)                 :: tPoint
+        type(PointType)                 :: tForce
         
         ! Locals
         real    :: rDistanceFromCenter
         real    :: rDistanceFromCircle
         real    :: rMagnitude
-        real    :: rFx
-        real    :: rFy
         
         ! Compute the information desired
         rDistanceFromCenter = sqrt(this % rX ** 2 + this % rY ** 2)
         rDistanceFromCircle = 1. - rDistanceFromCenter
         rMagnitude          = rDistanceFromCircle ** -2.
-        rFx                 = (this % rX / rDistanceFromCenter) * rMagnitude
-        rFx                 = (this % rY / rDistanceFromCenter) * rMagnitude
+        tForce % rX         = (this % rX / rDistanceFromCenter) * rMagnitude
+        tForce % rY         = (this % rY / rDistanceFromCenter) * rMagnitude
         
     end function ForceFromUnitCircle
     
