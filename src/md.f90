@@ -60,7 +60,7 @@ contains
         
         ! Check input parameters
         rAlpha = abs(rRho)
-        if(rAlpha > 1.) rAlpha = 1. - rAlpha
+        if(rAlpha > 1.) rAlpha = 1. / rAlpha
         
         ! Compute position
         this % rX = rRho * cos(rAlpha)
