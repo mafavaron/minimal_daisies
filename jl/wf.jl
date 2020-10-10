@@ -1,3 +1,5 @@
+#!/Applications/Julia-1.5.app/Contents/Resources/julia/bin/julia
+
 module WildFlower
 
     mutable struct Point
@@ -5,10 +7,12 @@ module WildFlower
         y::Float64
     end
 
-    function Initialize(p::Point)
-        local theta = 2.*pi*rand(Float64)
-        local rho   = rand(Float64)
-        point.x = rho*cos(alpha)
+    function Initialize()
+        local θ = 2. * pi * rand(Float64)
+        local ρ = rand(Float64)
+        return Point(ρ*cos(θ), ρ*sin(θ))
     end
 
 end
+
+
