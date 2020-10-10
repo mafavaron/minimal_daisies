@@ -62,7 +62,7 @@ program Minimal_Daisies
     do i = 1, 8
         call tPoint % GenerateDeterministic(0.5, ((i-1) / 8.) * 2. * 3.1415926535)
         tCentralForce = tPoint % ForceFromUnitCircle()
-        print "(i3,2(1x,f6.3),2(1x,e15.7))", i, tPoint % rX, tPoint % rY, tCentralForce % rX, tCentralForce % rY
+        print "(i3,2(1x,f6.3),2(1x,f7.3))", i, tPoint % rX, tPoint % rY, tCentralForce % rX, tCentralForce % rY
     end do
     
     ! Leave
