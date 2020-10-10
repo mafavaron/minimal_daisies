@@ -25,30 +25,29 @@ module md
     
 contains
 
-    function GenerateRandom(this) result(iNumIterations)
+    function GenerateRandom(this) result(rRho)
     
         ! Routine arguments
         class(PointType), intent(out)   :: this
-        integer                         :: iNumIterations
+        real                            :: rRho
         
         ! Locals
-        integer :: iIteration
+        real    :: rRho
+        real    :: rTheta
+        
+        ! Constants
+        real, parameter :: PI  = 3.1415926535
+        real, parameter :: PI2 = 2. * PI
         
         ! Repeat point generation until its coordinates lie inside the unit circle
         ! (OK, maybe not the most clever way to do; but, this step is done only
         ! once per point on a whole simulation, so the possible extra-cost may be
         ! safely neglected)
-        iIteration = 0
-        do
-            call random_number(this % rX)
-            call random_number(this % rY)
-            this % rX = 2. * this % rX - 1.
-            this % rY = 2. * this % rY - 1.
-            iIteration = iIteration + 1
-            if(this % rX ** 2 + this % rY ** 2 < 1.) exit
-        end do
-        iNumIterations = iIteration
-        
+        call random_number(rRho)
+        call random_number(rTheta)
+        this % rX = rRho * cos(rTheta*PI2)
+        this % rY = rRho * sin(rTheta*PI2)
+    
     end function GenerateRandom
     
     
@@ -60,9 +59,17 @@ contains
         
         ! Locals
         real    :: rDistanceFromCenter
+        real    :: rDistanceFromCircle
+        real    :: rMagnitude
+        real    :: rFx
+        real    :: rFy
         
         ! Compute the information desired
         rDistanceFromCenter = sqrt(this % rX ** 2 + this % rY ** 2)
+        rDistanceFromCircle = 1. - rDistanceFromCenter
+        rMagnitude          = rDistanceFromCircle ** -2.
+        rFx                 = (this % rX / rDistanceFromCenter) * rMagnitude
+        rFx                 = (this % rY / rDistanceFromCenter) * rMagnitude
         
     end function ForceFromUnitCircle
     
