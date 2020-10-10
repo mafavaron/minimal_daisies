@@ -60,7 +60,7 @@ program Minimal_Daisies
     
     do i = 1, 8
         call tPoint % GenerateDeterministic(0.5, ((i-1) / 8.) * 2. * 3.1415926535)
-        print *, i, tPoint % rX, tPoint % rY
+        print "(i3,2(1x,f6.3))", i, tPoint % rX, tPoint % rY
     end do
     
     ! Leave
