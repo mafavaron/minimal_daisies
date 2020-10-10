@@ -57,10 +57,18 @@ program Minimal_Daisies
     end do
     
     ! Debug: Advance one time step
-    print *, "*** Begin ***"
+    print *, "*** Test 1 ***"
     
     do i = 1, 8
         call tPoint % GenerateDeterministic(0.5, ((i-1) / 8.) * 2. * 3.1415926535)
+        tCentralForce = tPoint % ForceFromUnitCircle()
+        print "(i3,2(1x,f6.3),2(1x,f7.3))", i, tPoint % rX, tPoint % rY, tCentralForce % rX, tCentralForce % rY
+    end do
+    
+    print *, "*** Test 2 ***"
+    
+    do i = 1, 5
+        call tPoint % GenerateDeterministic(0.2*(i-1), 0.0)
         tCentralForce = tPoint % ForceFromUnitCircle()
         print "(i3,2(1x,f6.3),2(1x,f7.3))", i, tPoint % rX, tPoint % rY, tCentralForce % rX, tCentralForce % rY
     end do
