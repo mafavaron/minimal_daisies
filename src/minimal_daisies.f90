@@ -93,10 +93,6 @@ program Minimal_Daisies
         end do
         
         ! Dia print
-        print *
-        do i = 1, iNumPoints
-            print "('P_',i2.2,2(1x,f7.4))", i, tvPoint(i) % rX, tvPoint(i) % rY
-        end do
         print *, "Total absolute force: ", rTotForce, "   Iteration = ", iNumIterations
         
         iNumIterations = iNumIterations + 1
@@ -104,6 +100,14 @@ program Minimal_Daisies
         if(rTotForce <= 0.00001 .or. iNumIterations > 1000) exit
         
     end do
+    
+    ! Save data
+    open(10, file=sOutFile, status='unknown', action='write')
+    write(10, "('X, Y')")
+    do i = 1, iNumPoints
+        write(10, "(f8.5,',',f8.5)") tvPoint(i) % rX, tvPoint(i) % rY
+    end do
+    close(10)
     
     ! Leave
     deallocate(tvForce)
