@@ -18,9 +18,9 @@ program Minimal_Daisies
     character(len=16)                           :: sBuffer
     integer                                     :: i
     integer                                     :: iNumIterations
-    type(PointType), dimension(:), allocatable  :: tvPoint
-    type(PointType)                             :: tPoint
-    type(PointType)                             :: tCentralForce
+    type(VectorType), dimension(:), allocatable :: tvPoint
+    type(VectorType)                            :: tPoint
+    type(VectorType)                            :: tCentralForce
     
     ! Get parameters
     if(command_argument_count() /= 3) then
