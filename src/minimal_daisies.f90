@@ -16,13 +16,13 @@ program Minimal_Daisies
     real                                        :: rExponent
     real                                        :: rMaxForce
     real                                        :: rTimeStep
+    real                                        :: rTotForce
     character(len=256)                          :: sOutFile
     character(len=16)                           :: sBuffer
     integer                                     :: i
     integer                                     :: j
     integer                                     :: iNumIterations
     type(VectorType), dimension(:), allocatable :: tvPoint
-    type(VectorType), dimension(:), allocatable :: tvPointOld
     type(VectorType), dimension(:), allocatable :: tvForce
     
     ! Get parameters
@@ -55,14 +55,13 @@ program Minimal_Daisies
     
     ! Generate an initial admissible configuration
     allocate(tvPoint(iNumPoints))
-    allocate(tvPointOld(iNumPoints))
     allocate(tvForce(iNumPoints))
     do i = 1, iNumPoints
         call tvPoint(i) % GenerateRandom()
-        tvPointOld(i) = tvPoint(i)
     end do
     
     ! Main loop
+    iNumIterations = 0
     do
     
         ! Generate the composed force for each point
@@ -84,20 +83,30 @@ program Minimal_Daisies
         
         ! Perform one iteration
         do i = 1, iNumPoints
-            call tvPoint(i) % Update(tvForce(i), tvPointOld(i), rTimeStep)
+            call tvPoint(i) % Update(tvForce(i), rTimeStep)
+        end do
+        
+        ! Compute the sum of absolute forces acting on points
+        rTotForce = 0.
+        do i = 1, iNumPoints
+            rTotForce = rTotForce + tvForce(i) % Length()
         end do
         
         ! Dia print
+        print *
         do i = 1, iNumPoints
-            print *
             print "('P_',i2.2,2(1x,f7.4))", i, tvPoint(i) % rX, tvPoint(i) % rY
         end do
+        print *, "Total absolute force: ", rTotForce, "   Iteration = ", iNumIterations
+        
+        iNumIterations = iNumIterations + 1
+        
+        if(rTotForce <= 0.00001 .or. iNumIterations > 1000) exit
         
     end do
     
     ! Leave
     deallocate(tvForce)
-    deallocate(tvPointOld)
     deallocate(tvPoint)
     print *, "*** End Job ***"
 
