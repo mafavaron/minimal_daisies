@@ -22,6 +22,7 @@ module md
         procedure   :: GenerateRandom
         procedure   :: GenerateDeterministic
         procedure   :: ForceFromUnitCircle
+        procedure   :: ForceFromPoint
     end type PointType
     
 contains
@@ -93,5 +94,33 @@ contains
         end if
         
     end function ForceFromUnitCircle
+    
+    
+    function ForceFromPoint(this, tOtherPoint) result(tForce)
+    
+        ! Routine arguments
+        class(PointType), intent(in)    :: this
+        type(PointType), intent(in)     :: tOtherPoint
+        type(PointType)                 :: tForce
+        
+        ! Locals
+        real    :: rDistance
+        real    :: rMagnitude
+        real    :: rDx
+        real    :: rDy
+        
+        ! Compute distance and force magnitude
+        rDistance = sqrt((this % rX - tOtherPoint % rX)**2 + (this % rY - tOtherPoint % rY)**2)
+        rMagnitude = 1. / rDistance ** 2
+        
+        ! To express direction, we may write the position of the
+        ! "main" point relative to the "other", and use this data
+        ! as we made with force from circle
+        rDx = this % rX - tOtherPoint % rX
+        rDy = this % rY - tOtherPoint % rY
+        tForce % rX = (rDx / rDistance) * rMagnitude
+        tForce % rY = (rDy / rDistance) * rMagnitude
+        
+    end function ForceFromPoint
     
 end module md
