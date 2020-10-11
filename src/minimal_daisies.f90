@@ -17,12 +17,10 @@ program Minimal_Daisies
     character(len=256)                          :: sOutFile
     character(len=16)                           :: sBuffer
     integer                                     :: i
+    integer                                     :: j
     integer                                     :: iNumIterations
     type(VectorType), dimension(:), allocatable :: tvPoint
-    type(VectorType)                            :: tPoint
-    type(VectorType)                            :: tOtherPoint
-    type(VectorType)                            :: tCentralForce
-    type(VectorType)                            :: tPointForce
+    type(VectorType), dimension(:), allocatable :: tvForce
     
     ! Get parameters
     if(command_argument_count() /= 3) then
@@ -54,41 +52,31 @@ program Minimal_Daisies
     
     ! Generate an initial admissible configuration
     allocate(tvPoint(iNumPoints))
+    allocate(tvForce(iNumPoints))
     do i = 1, iNumPoints
         iNumIterations = tvPoint(i) % GenerateRandom()
     end do
     
-    ! Debug: Advance one time step
-    print *, "*** Test 1 ***"
+    ! Main loop
+    do
     
-    do i = 1, 8
-        call tPoint % GenerateDeterministic(0.5, ((i-1) / 8.) * 2. * 3.1415926535)
-        tCentralForce = tPoint % ForceFromUnitCircle()
-        print "(i3,2(1x,f6.3),2(1x,f7.3))", i, tPoint % rX, tPoint % rY, tCentralForce % rX, tCentralForce % rY
-    end do
-    
-    print *, "*** Test 2 ***"
-    
-    do i = 1, 5
-        call tPoint % GenerateDeterministic(0.2*(i-1), 0.0)
-        tCentralForce = tPoint % ForceFromUnitCircle()
-        print "(i3,2(1x,f6.3),2(1x,f7.3))", i, tPoint % rX, tPoint % rY, tCentralForce % rX, tCentralForce % rY
-    end do
-    
-    print *, "*** Test 3 ***"
-    
-    tOtherPoint = VectorType(0., 0.)
-    do i = 1, 8
-        call tPoint % GenerateDeterministic(0.5, ((i-1) / 8.) * 2. * 3.1415926535)
-        tCentralForce = tPoint % ForceFromUnitCircle()
-        tPointForce   = tPoint % ForceFromPoint(tOtherPoint)
-        print "(i3,2(1x,f6.3),4(1x,f7.3))", i, &
-            tPoint % rX, tPoint % rY, &
-            tCentralForce % rX, tCentralForce % rY, &
-            tPointForce % rX, tPointForce % rY
+        ! Generate the composed force for each point
+        do i = 1, iNumPoints
+            tvForce(i) = tvPoint(i) % ForceFromUnitCircle()
+            do j = 1, iNumPoints
+                if(i /= j) then
+                    tvForce(i) = tvForce(i) % VectorAdd(tvPoint(i) % ForceFromPoint(tvPoint(j)))
+                end if
+            end do
+        end do
+        
+        ! For debug
+        exit
+        
     end do
     
     ! Leave
+    deallocate(tvForce)
     deallocate(tvPoint)
     print *, "*** End Job ***"
 
