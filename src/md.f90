@@ -168,7 +168,7 @@ contains
         real, intent(in)                    :: rDeltaTime
         
         ! Locals
-        ! --none--
+        real    :: rVectorLength
         
         ! We act "Newton' style", by assuming all the causes behind
         ! the force are fixed - all other points included. Now, F=m*a
@@ -191,6 +191,13 @@ contains
         
         this % rX = rDeltaTime**2 * tForce % rX - 2.*this % rX + tPointOld % rX
         this % rY = rDeltaTime**2 * tForce % rY - 2.*this % rY + tPointOld % rY
+        
+        ! Check the point has reached or exceeded the unit circle
+        rVectorLength = sqrt(this % rX ** 2 + this % rY ** 2)
+        if(rVectorLength >= 1.) then
+            this % rX = this % rX / (1.0001 * rVectorLength)
+            this % rY = this % rY / (1.0001 * rVectorLength)
+        end if
         
         tPointOld = this
         
