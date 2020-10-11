@@ -17,8 +17,10 @@ program Minimal_Daisies
     character(len=256)                          :: sOutFile
     character(len=16)                           :: sBuffer
     integer                                     :: i
+    integer                                     :: j
     integer                                     :: iNumIterations
-    type(PointType), dimension(:), allocatable  :: tvPoint
+    type(VectorType), dimension(:), allocatable :: tvPoint
+    type(VectorType), dimension(:), allocatable :: tvForce
     
     ! Get parameters
     if(command_argument_count() /= 3) then
@@ -50,14 +52,31 @@ program Minimal_Daisies
     
     ! Generate an initial admissible configuration
     allocate(tvPoint(iNumPoints))
+    allocate(tvForce(iNumPoints))
     do i = 1, iNumPoints
         iNumIterations = tvPoint(i) % GenerateRandom()
     end do
     
-    ! Debug: Advance one time step
-    print *, "*** Begin ***"
+    ! Main loop
+    do
+    
+        ! Generate the composed force for each point
+        do i = 1, iNumPoints
+            tvForce(i) = tvPoint(i) % ForceFromUnitCircle()
+            do j = 1, iNumPoints
+                if(i /= j) then
+                    tvForce(i) = tvForce(i) % VectorAdd(tvPoint(i) % ForceFromPoint(tvPoint(j)))
+                end if
+            end do
+        end do
+        
+        ! For debug
+        exit
+        
+    end do
     
     ! Leave
+    deallocate(tvForce)
     deallocate(tvPoint)
     print *, "*** End Job ***"
 
