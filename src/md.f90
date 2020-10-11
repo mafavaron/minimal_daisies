@@ -20,6 +20,7 @@ module md
         real    :: rY
     contains
         procedure   :: VectorAdd
+        procedure   :: Length
         procedure   :: GenerateRandom
         procedure   :: GenerateDeterministic
         procedure   :: ForceFromUnitCircle
@@ -27,6 +28,38 @@ module md
     end type VectorType
     
 contains
+    
+    function VectorAdd(this, tVectorB) result(tVector)
+    
+        ! Routine arguments
+        class(VectorType), intent(in)   :: this
+        type(VectorType), intent(in)    :: tVectorB
+        type(VectorType)                :: tVector
+        
+        ! Locals
+        ! --none--
+        
+        ! Compute the sum of vectors
+        tVector % rX = this % rX + tVectorB % rX
+        tVector % rY = this % rY + tVectorB % rY
+        
+    end function VectorAdd
+    
+    
+    function Length(this) result(rLength)
+    
+        ! Routine arguments
+        class(VectorType), intent(in)   :: this
+        real                            :: rLength
+        
+        ! Locals
+        ! --none--
+        
+        ! Compute the information desired
+        rLength = sqrt(this % rX ** 2 + this % rY ** 2)
+        
+    end function Length
+    
 
     function GenerateRandom(this) result(rRho)
     
@@ -123,22 +156,5 @@ contains
         tForce % rY = (rDy / rDistance) * rMagnitude
         
     end function ForceFromPoint
-    
-    
-    function VectorAdd(this, tVectorB) result(tVector)
-    
-        ! Routine arguments
-        class(VectorType), intent(in)   :: this
-        type(VectorType), intent(in)    :: tVectorB
-        type(VectorType)                :: tVector
-        
-        ! Locals
-        ! --none--
-        
-        ! Compute the sum of vectors
-        tVector % rX = this % rX + tVectorB % rX
-        tVector % rY = this % rY + tVectorB % rY
-        
-    end function VectorAdd
     
 end module md
