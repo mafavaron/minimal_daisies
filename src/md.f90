@@ -19,6 +19,7 @@ module md
         real    :: rX
         real    :: rY
     contains
+        procedure   :: VectorAdd
         procedure   :: GenerateRandom
         procedure   :: GenerateDeterministic
         procedure   :: ForceFromUnitCircle
@@ -122,5 +123,22 @@ contains
         tForce % rY = (rDy / rDistance) * rMagnitude
         
     end function ForceFromPoint
+    
+    
+    function VectorAdd(this, tVectorB) result(tVector)
+    
+        ! Routine arguments
+        class(VectorType), intent(in)   :: this
+        type(VectorType), intent(in)    :: tVectorB
+        type(VectorType)                :: tVector
+        
+        ! Locals
+        ! --none--
+        
+        ! Compute the sum of vectors
+        tVector % rX = this % rX + tVectorB % rX
+        tVector % rY = this % rY + tVectorB % rY
+        
+    end function VectorAdd
     
 end module md
