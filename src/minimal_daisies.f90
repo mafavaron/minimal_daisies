@@ -87,8 +87,11 @@ program Minimal_Daisies
             call tvPoint(i) % Update(tvForce(i), tvPointOld(i), rTimeStep)
         end do
         
-        ! For debug
-        exit
+        ! Dia print
+        do i = 1, iNumPoints
+            print *
+            print "('P_',i2.2,2(1x,f7.4))", i, tvPoint(i) % rX, tvPoint(i) % rY
+        end do
         
     end do
     
