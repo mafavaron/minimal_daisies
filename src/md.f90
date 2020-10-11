@@ -159,11 +159,10 @@ contains
     end function ForceFromPoint
     
     
-    subroutine Update(this, tPointOld, tForce, rDeltaTime)
+    subroutine Update(this, tForce, rDeltaTime)
     
         ! Routine arguments
         class(VectorType), intent(inout)    :: this
-        type(VectorType), intent(inout)     :: tPointOld
         type(VectorType), intent(in)        :: tForce
         real, intent(in)                    :: rDeltaTime
         
@@ -189,8 +188,11 @@ contains
         !
         ! This, at least, in the intention :)
         
-        this % rX = rDeltaTime**2 * tForce % rX - 2.*this % rX + tPointOld % rX
-        this % rY = rDeltaTime**2 * tForce % rY - 2.*this % rY + tPointOld % rY
+        !this % rX = rDeltaTime**2 * tForce % rX - 2.*this % rX + tPointOld % rX
+        !this % rY = rDeltaTime**2 * tForce % rY - 2.*this % rY + tPointOld % rY
+        
+        this % rX = rDeltaTime * tForce % rX + this % rX
+        this % rY = rDeltaTime * tForce % rY + this % rY
         
         ! Check the point has reached or exceeded the unit circle
         rVectorLength = sqrt(this % rX ** 2 + this % rY ** 2)
@@ -198,8 +200,6 @@ contains
             this % rX = this % rX / (1.0001 * rVectorLength)
             this % rY = this % rY / (1.0001 * rVectorLength)
         end if
-        
-        tPointOld = this
         
     end subroutine Update
     
