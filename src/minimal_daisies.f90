@@ -14,12 +14,15 @@ program Minimal_Daisies
     integer                                     :: iErrCode
     integer                                     :: iNumPoints
     real                                        :: rExponent
+    real                                        :: rMaxForce
+    real                                        :: rTimeStep
     character(len=256)                          :: sOutFile
     character(len=16)                           :: sBuffer
     integer                                     :: i
     integer                                     :: j
     integer                                     :: iNumIterations
     type(VectorType), dimension(:), allocatable :: tvPoint
+    type(VectorType), dimension(:), allocatable :: tvPointOld
     type(VectorType), dimension(:), allocatable :: tvForce
     
     ! Get parameters
@@ -52,9 +55,11 @@ program Minimal_Daisies
     
     ! Generate an initial admissible configuration
     allocate(tvPoint(iNumPoints))
+    allocate(tvPointOld(iNumPoints))
     allocate(tvForce(iNumPoints))
     do i = 1, iNumPoints
-        iNumIterations = tvPoint(i) % GenerateRandom()
+        call tvPoint(i) % GenerateRandom()
+        tvPointOld(i) = tvPoint(i)
     end do
     
     ! Main loop
@@ -70,6 +75,18 @@ program Minimal_Daisies
             end do
         end do
         
+        ! Compute the maximum force and, from it, the next time step
+        rMaxForce = 0.
+        do i = 1, iNumPoints
+            rMaxForce = max(rMaxForce, tvForce(i) % Length())
+        end do
+        rTimeStep = 0.01 / max(1.,rMaxForce/10.)
+        
+        ! Perform one iteration
+        do i = 1, iNumPoints
+            call tvPoint(i) % Update(tvForce(i), tvPointOld(i), rTimeStep)
+        end do
+        
         ! For debug
         exit
         
@@ -77,6 +94,7 @@ program Minimal_Daisies
     
     ! Leave
     deallocate(tvForce)
+    deallocate(tvPointOld)
     deallocate(tvPoint)
     print *, "*** End Job ***"
 
