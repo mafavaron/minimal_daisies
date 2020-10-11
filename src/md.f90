@@ -169,28 +169,7 @@ contains
         ! Locals
         real    :: rVectorLength
         
-        ! We act "Newton' style", by assuming all the causes behind
-        ! the force are fixed - all other points included. Now, F=m*a
-        ! so a = F/m. But 'a' is the second derivative of the position,
-        ! respect to time. In discrete terms, we may write
-        !
-        !   a = ((x(t+2h)-x(t+h))/h - (x(t+h)-x(t))/h)/h =
-        !
-        !     = (x(2h+t) - 2x(h+t) + x(t)) / h^2
-        !
-        ! But then,
-        !
-        !   (x(2h+t) - 2x(h+t) + x(t)) / h^2 = F/m
-        !
-        ! from which
-        !
-        !   x(2h+t) = (F/m) * h^2 + 2x(h+t) - x(t)
-        !
-        ! This, at least, in the intention :)
-        
-        !this % rX = rDeltaTime**2 * tForce % rX - 2.*this % rX + tPointOld % rX
-        !this % rY = rDeltaTime**2 * tForce % rY - 2.*this % rY + tPointOld % rY
-        
+        ! Contraction step (which, incidentally, has nothing to do with F = m*a)
         this % rX = rDeltaTime * tForce % rX + this % rX
         this % rY = rDeltaTime * tForce % rY + this % rY
         
