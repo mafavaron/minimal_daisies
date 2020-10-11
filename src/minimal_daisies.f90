@@ -97,7 +97,7 @@ program Minimal_Daisies
         
         iNumIterations = iNumIterations + 1
         
-        if(rTotForce <= 0.00001 .or. iNumIterations > 1000) exit
+        if(rTotForce <= 0.00001 .or. iNumIterations > 1000*iNumPoints) exit
         
     end do
     
