@@ -20,7 +20,9 @@ program Minimal_Daisies
     integer                                     :: iNumIterations
     type(VectorType), dimension(:), allocatable :: tvPoint
     type(VectorType)                            :: tPoint
+    type(VectorType)                            :: tOtherPoint
     type(VectorType)                            :: tCentralForce
+    type(VectorType)                            :: tPointForce
     
     ! Get parameters
     if(command_argument_count() /= 3) then
@@ -71,6 +73,19 @@ program Minimal_Daisies
         call tPoint % GenerateDeterministic(0.2*(i-1), 0.0)
         tCentralForce = tPoint % ForceFromUnitCircle()
         print "(i3,2(1x,f6.3),2(1x,f7.3))", i, tPoint % rX, tPoint % rY, tCentralForce % rX, tCentralForce % rY
+    end do
+    
+    print *, "*** Test 3 ***"
+    
+    tOtherPoint = VectorType(0., 0.)
+    do i = 1, 8
+        call tPoint % GenerateDeterministic(0.5, ((i-1) / 8.) * 2. * 3.1415926535)
+        tCentralForce = tPoint % ForceFromUnitCircle()
+        tPointForce   = tPoint % ForceFromPoint(tOtherPoint)
+        print "(i3,2(1x,f6.3),4(1x,f7.3))", i, &
+            tPoint % rX, tPoint % rY, &
+            tCentralForce % rX, tCentralForce % rY, &
+            tPointForce % rX, tPointForce % rY
     end do
     
     ! Leave
