@@ -159,15 +159,16 @@ contains
     end function ForceFromPoint
     
     
-    function Update(this, tPointOld, tForce) result(rShift)
+    subroutine Update(this, tPointOld, tForce, rDeltaTime)
     
         ! Routine arguments
-        class(VectorType), intent(in)   :: this
-        type(VectorType), intent(in)    :: tPointOld
-        type(VectorType), intent(in)    :: tForce
-        real                            :: rShift
+        class(VectorType), intent(inout)    :: this
+        type(VectorType), intent(inout)     :: tPointOld
+        type(VectorType), intent(in)        :: tForce
+        real, intent(in)                    :: rDeltaTime
         
         ! Locals
+        ! --none--
         
         ! We act "Newton' style", by assuming all the causes behind
         ! the force are fixed - all other points included. Now, F=m*a
@@ -184,8 +185,15 @@ contains
         !
         ! from which
         !
-        !   x(2h+t) = (F/m) * h^2 + 2x(h+t) - x(t)  
+        !   x(2h+t) = (F/m) * h^2 + 2x(h+t) - x(t)
+        !
+        ! This, at least, in the intention :)
         
-    end function Update
+        this % rX = rDeltaTime**2 * tForce % rX - 2.*this % rX + tPointOld % rX
+        this % rY = rDeltaTime**2 * tForce % rY - 2.*this % rY + tPointOld % rY
+        
+        tPointOld = this
+        
+    end subroutine Update
     
 end module md
