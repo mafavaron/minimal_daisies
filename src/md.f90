@@ -11,11 +11,11 @@ module md
     private
     
     ! Public interface
-    public  :: PointType
+    public  :: VectorType
     
     ! Data types
     
-    type PointType
+    type VectorType
         real    :: rX
         real    :: rY
     contains
@@ -23,14 +23,14 @@ module md
         procedure   :: GenerateDeterministic
         procedure   :: ForceFromUnitCircle
         procedure   :: ForceFromPoint
-    end type PointType
+    end type VectorType
     
 contains
 
     function GenerateRandom(this) result(rRho)
     
         ! Routine arguments
-        class(PointType), intent(out)   :: this
+        class(VectorType), intent(out)  :: this
         real                            :: rRho
         
         ! Locals
@@ -52,7 +52,7 @@ contains
     subroutine GenerateDeterministic(this, rRho, rTheta)
     
         ! Routine arguments
-        class(PointType), intent(out)   :: this
+        class(VectorType), intent(out)  :: this
         real, intent(in)                :: rRho
         real, intent(in)                :: rTheta
         
@@ -73,8 +73,8 @@ contains
     function ForceFromUnitCircle(this) result(tForce)
     
         ! Routine arguments
-        class(PointType), intent(in)    :: this
-        type(PointType)                 :: tForce
+        class(VectorType), intent(in)   :: this
+        type(VectorType)                :: tForce
         
         ! Locals
         real    :: rDistanceFromCenter
@@ -99,9 +99,9 @@ contains
     function ForceFromPoint(this, tOtherPoint) result(tForce)
     
         ! Routine arguments
-        class(PointType), intent(in)    :: this
-        type(PointType), intent(in)     :: tOtherPoint
-        type(PointType)                 :: tForce
+        class(VectorType), intent(in)   :: this
+        type(VectorType), intent(in)    :: tOtherPoint
+        type(VectorType)                :: tForce
         
         ! Locals
         real    :: rDistance
