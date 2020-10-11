@@ -25,6 +25,7 @@ module md
         procedure   :: GenerateDeterministic
         procedure   :: ForceFromUnitCircle
         procedure   :: ForceFromPoint
+        procedure   :: Update
     end type VectorType
     
 contains
@@ -61,13 +62,13 @@ contains
     end function Length
     
 
-    function GenerateRandom(this) result(rRho)
+    subroutine GenerateRandom(this)
     
         ! Routine arguments
         class(VectorType), intent(out)  :: this
-        real                            :: rRho
         
         ! Locals
+        real    :: rRho
         real    :: rTheta
         
         ! Constants
@@ -80,7 +81,7 @@ contains
         this % rX = rRho * cos(rTheta*PI2)
         this % rY = rRho * sin(rTheta*PI2)
     
-    end function GenerateRandom
+    end subroutine GenerateRandom
     
     
     subroutine GenerateDeterministic(this, rRho, rTheta)
@@ -156,5 +157,35 @@ contains
         tForce % rY = (rDy / rDistance) * rMagnitude
         
     end function ForceFromPoint
+    
+    
+    function Update(this, tPointOld, tForce) result(rShift)
+    
+        ! Routine arguments
+        class(VectorType), intent(in)   :: this
+        type(VectorType), intent(in)    :: tPointOld
+        type(VectorType), intent(in)    :: tForce
+        real                            :: rShift
+        
+        ! Locals
+        
+        ! We act "Newton' style", by assuming all the causes behind
+        ! the force are fixed - all other points included. Now, F=m*a
+        ! so a = F/m. But 'a' is the second derivative of the position,
+        ! respect to time. In discrete terms, we may write
+        !
+        !   a = ((x(t+2h)-x(t+h))/h - (x(t+h)-x(t))/h)/h =
+        !
+        !     = (x(2h+t) - 2x(h+t) + x(t)) / h^2
+        !
+        ! But then,
+        !
+        !   (x(2h+t) - 2x(h+t) + x(t)) / h^2 = F/m
+        !
+        ! from which
+        !
+        !   x(2h+t) = (F/m) * h^2 + 2x(h+t) - x(t)  
+        
+    end function Update
     
 end module md
