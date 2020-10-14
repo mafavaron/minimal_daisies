@@ -26,6 +26,7 @@ module md
         procedure   :: ForceFromUnitCircle
         procedure   :: ForceFromPoint
         procedure   :: Update
+        procedure   :: Anneal
     end type VectorType
     
 contains
@@ -181,5 +182,29 @@ contains
         end if
         
     end subroutine Update
+    
+    
+    subroutine Anneal(tvPoint, rIntensity)
+    
+        ! Routine arguments
+        type(VectorType), dimension(:), intent(inout)   :: tvPoint
+        real, intent(inout)                             :: rIntensity
+        
+        ! Locals
+        integer                                     :: iNumPoints
+        real                                        :: rVectorLength
+        type(VectorType), dimension(:), allocatable :: tvForce
+        type(VectorType), dimension(:), allocatable :: tvNewPoint
+        
+        ! Reserve workspace
+        iNumPoints = size(tvPoint)
+        allocate(tvForce(iNumPoints))
+        allocate(tvNewPoint(iNumPoints))
+        
+        ! Leave
+        deallocate(tvNewPoint)
+        deallocate(tvForce)
+        
+    end subroutine Anneal
     
 end module md
