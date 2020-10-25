@@ -47,12 +47,12 @@ function Zi(
 	Ta  = T + 273.15
 
 	# Preallocate vectors (this will spare R a lot of behind-the-scenes work)
-	zi             = Array{Float64,1}[undef, n]
+	zi             = Array{Union{Missing, Float64},1}[missing, n]
 	zi_convective  = Array{Union{Missing, Float64},1}[missign, n]
-	zi_stable      = Array{Float64,1}[undef, n]
-	zi_neutral     = Array{Float64,1}[undef, n]
-	zi_mechanical  = Array{Float64,1}[undef, n]
-	zi_mech.stable = Array{Float64,1}[undef, n]
+	zi_stable      = Array{Union{Missing, Float64},1}[missign, n]
+	zi_neutral     = Array{Union{Missing, Float64},1}[missign, n]
+	zi_mechanical  = Array{Union{Missing, Float64},1}[missign, n]
+	zi_mech_stable = Array{Union{Missing, Float64},1}[missign, n]
 
 	# Classify situations based on turbulent flux of sensible heat; the "h0_threshold" value
 	# is a non-negative value whose default, 0, excludes neutral cases. Sensible determination
@@ -162,6 +162,7 @@ function Zi(
 		end
 	end
 
-  return (zi, zi_stable, zi_mechanical, zi_convective)
+	# Leave
+	return (zi, zi_stable, zi_mechanical, zi_convective)
 
 end
