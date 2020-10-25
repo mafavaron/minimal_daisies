@@ -48,7 +48,7 @@ function Zi(
 
 	# Preallocate vectors (this will spare R a lot of behind-the-scenes work)
 	zi             = Array{Float64,1}[undef, n]
-	zi_convective  = Array{Float64,1}[undef, n]
+	zi_convective  = Array{Union{Missing, Float64},1}[missign, n]
 	zi_stable      = Array{Float64,1}[undef, n]
 	zi_neutral     = Array{Float64,1}[undef, n]
 	zi_mechanical  = Array{Float64,1}[undef, n]
@@ -135,32 +135,30 @@ function Zi(
 		if length(convective_this_day) > 0
 
 			# Delimit convective part of this day
-			begin_convective = min(convective_this_day)
-			end_convective   = max(convective_this_day)
-			initial_value    = 0.
+			local begin_convective = min(convective_this_day)
+			local end_convective   = max(convective_this_day)
+			local initial_value    = 0.
 
 			# Actual Gryning-Batchvarova step
 			for k in begin_convective:end_convective
-				p         = [wt[k], L[k], u_star[k], Ta[k], g]
-				zi0       = initial_value
-				time_span = (0.0,60.0*avg_time)
-				problem   = ODEProblem(gry_bat, zi0, time_span)
-				solution  = solve(problem, Tsit5(), reltol=1.e-8, abstol=1.e-8)
-				zi_convective[k] = solution(60.0*avg_time)
-				initial_value    = zi_convective[k]
+				local p         = [wt[k], L[k], u_star[k], Ta[k], g]
+				local zi0       = initial_value
+				local time_span = (0.0,60.0*avg_time)
+				local problem   = ODEProblem(gry_bat, zi0, time_span)
+				local solution  = solve(problem, Tsit5(), reltol=1.e-8, abstol=1.e-8)
+				local zi_convective[k] = solution(60.0*avg_time)
+				local initial_value    = zi_convective[k]
 			end
 
 		end
 
 	end
 
-******************<Patti_was_Here>*******************
-
 	# Build final mixing height as maximum between "stable-mechanical" and convective, where the latter exists.
-	zi <- zi.mech.stable
-	for k in 1:n.data
-		if !is.na(zi.convective[k])
-			zi[k] <- max(c(zi.mech.stable[k], zi.convective[k]));
+	zi = zi_mech_stable
+	for k in 1:n_data
+		if !ismissing(zi_convective[k])
+			zi[k] = max(zi_mech_stable[k], zi_convective[k]))
 		end
 	end
 
